@@ -204,8 +204,10 @@ h1 .dot{width:12px;height:12px;border-radius:3px;background:var(--accent);transf
           <button id="aNotif" data-t="notif">Turn on notifications</button>
           <button id="aBackup" data-t="backup">Save backup</button>
           <button id="aRestore" data-t="restore">Restore backup</button>
+          <button id="aKeep" data-t="importKeep">Import from Google Keep</button>
         </div>
         <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+        <input type="file" id="keepFile" accept=".zip,.json,application/zip,application/x-zip-compressed,application/json" multiple hidden>
       </div>
     </div>
     <label class="search">
@@ -302,9 +304,9 @@ h1 .dot{width:12px;height:12px;border-radius:3px;background:var(--accent);transf
 (function(){
 const COLORS=["default","lemon","mint","sky","peach","lilac","rose","sand"];
 const STR={
- en:{all:"All",notes:"Notes",tasks:"Tasks",todo:"To do",reminders:"Reminders",pinned:"Pinned",others:"Others",search:"Search notes and tasks",take:"Take a note…",newList:"New list",newImg:"New note with image",pin:"Pin note",title:"Title",listItem:"List item",reply:"Reply…",close:"Close",color:"Background color",remindMe:"Remind me",addImg:"Add image",more:"More",undo:"Undo",redo:"Redo",showCb:"Show checkboxes",hideCb:"Hide checkboxes",untick:"Uncheck all items",clearDone:"Delete checked items",copy:"Make a copy",del:"Delete note",reminder:"Reminder",later:"Later today",tomorrow:"Tomorrow",nextWeek:"Next week",pick:"Pick date & time",save:"Save",fromNote:"from note",phoneAlert:"Calendar alert",edited:"Edited",replied:"Replied",yesterday:"Yesterday",today:"Today",checked:n=>n+" checked item"+(n>1?"s":""),doneOf:(a,b)=>a+"/"+b+" done",count:(a,b)=>a+" note"+(a>1?"s":"")+" · "+b+" task"+(b===1?"":"s")+" left",emptyBig:"Notes you add appear here",emptySmall:"Tap <b>Take a note…</b> to start. Use the ☑ icon for a task list, with a reply box under each item.",noMatch:"Nothing matches",tryOther:"Try another word or filter.",deleted:"Note deleted",copyMade:"Copy made",reminderT:"Reminder: ",untitled:"Untitled note",badImg:"That file couldn't be opened as an image.",full:"Phone storage is full. Delete some notes or images.",install:"Install app",menu:"Menu",switchLang:"العربية",notif:"Turn on notifications",notifOn:"Notifications are on ✓",notifNo:"Notifications are blocked. Allow them in your phone settings for this app.",backup:"Save backup",restore:"Restore backup",restored:n=>"Restored "+n+" notes",badFile:"That file isn't a Pocket Keep backup.",status:"Saved on this phone · works offline",custom:"Pick any color",copySuffix:" (copy)",at8:"8:00 AM",
+ en:{all:"All",notes:"Notes",tasks:"Tasks",todo:"To do",reminders:"Reminders",pinned:"Pinned",others:"Others",search:"Search notes and tasks",take:"Take a note…",newList:"New list",newImg:"New note with image",pin:"Pin note",title:"Title",listItem:"List item",reply:"Reply…",close:"Close",color:"Background color",remindMe:"Remind me",addImg:"Add image",more:"More",undo:"Undo",redo:"Redo",showCb:"Show checkboxes",hideCb:"Hide checkboxes",untick:"Uncheck all items",clearDone:"Delete checked items",copy:"Make a copy",del:"Delete note",reminder:"Reminder",later:"Later today",tomorrow:"Tomorrow",nextWeek:"Next week",pick:"Pick date & time",save:"Save",fromNote:"from note",phoneAlert:"Calendar alert",edited:"Edited",replied:"Replied",yesterday:"Yesterday",today:"Today",checked:n=>n+" checked item"+(n>1?"s":""),doneOf:(a,b)=>a+"/"+b+" done",count:(a,b)=>a+" note"+(a>1?"s":"")+" · "+b+" task"+(b===1?"":"s")+" left",emptyBig:"Notes you add appear here",emptySmall:"Tap <b>Take a note…</b> to start. Use the ☑ icon for a task list, with a reply box under each item.",noMatch:"Nothing matches",tryOther:"Try another word or filter.",deleted:"Note deleted",copyMade:"Copy made",reminderT:"Reminder: ",untitled:"Untitled note",badImg:"That file couldn't be opened as an image.",full:"Phone storage is full. Delete some notes or images.",install:"Install app",menu:"Menu",switchLang:"العربية",notif:"Turn on notifications",notifOn:"Notifications are on ✓",notifNo:"Notifications are blocked. Allow them in your phone settings for this app.",backup:"Save backup",restore:"Restore backup",restored:n=>"Restored "+n+" notes",badFile:"That file isn't a Pocket Keep backup.",status:"Saved on this phone · works offline",importKeep:"Import from Google Keep",importing:"Importing your Keep notes…",imported:n=>"Imported "+n+" notes from Google Keep",noKeep:"No Keep notes found. Choose the Takeout .zip file (or the .json files inside the Keep folder).",needNet:"Connect to the internet to read the .zip file, then try again.",custom:"Pick any color",copySuffix:" (copy)",at8:"8:00 AM",
   colors:{default:"Default",lemon:"Lemon",mint:"Mint",sky:"Sky",peach:"Peach",lilac:"Lilac",rose:"Rose",sand:"Sand"}},
- ar:{all:"الكل",notes:"ملاحظات",tasks:"مهام",todo:"غير منجزة",reminders:"تذكيرات",pinned:"مثبّتة",others:"أخرى",search:"ابحث في الملاحظات والمهام",take:"اكتب ملاحظة…",newList:"قائمة جديدة",newImg:"ملاحظة بصورة",pin:"تثبيت",title:"العنوان",listItem:"عنصر",reply:"الرد…",close:"إغلاق",color:"لون الخلفية",remindMe:"ذكّرني",addImg:"إضافة صورة",more:"المزيد",undo:"تراجع",redo:"إعادة",showCb:"إظهار مربعات الاختيار",hideCb:"إخفاء مربعات الاختيار",untick:"إلغاء تحديد الكل",clearDone:"حذف العناصر المنجزة",copy:"عمل نسخة",del:"حذف الملاحظة",reminder:"تذكير",later:"لاحقاً اليوم",tomorrow:"غداً",nextWeek:"الأسبوع القادم",pick:"اختر التاريخ والوقت",save:"حفظ",fromNote:"من الملاحظة",phoneAlert:"تنبيه في التقويم",edited:"آخر تعديل",replied:"تم الرد",yesterday:"أمس",today:"اليوم",checked:n=>n+" منجز",doneOf:(a,b)=>a+"/"+b+" منجز",count:(a,b)=>a+" ملاحظة · "+b+" مهمة متبقية",emptyBig:"ملاحظاتك تظهر هنا",emptySmall:"اضغط <b>اكتب ملاحظة…</b> للبدء، أو أيقونة ☑ لقائمة مهام مع خانة رد تحت كل عنصر.",noMatch:"لا توجد نتائج",tryOther:"جرّب كلمة أو فلتر آخر.",deleted:"تم حذف الملاحظة",copyMade:"تم عمل نسخة",reminderT:"تذكير: ",untitled:"ملاحظة بدون عنوان",badImg:"تعذّر فتح هذا الملف كصورة.",full:"مساحة التخزين ممتلئة. احذف بعض الملاحظات أو الصور.",install:"تثبيت التطبيق",menu:"القائمة",switchLang:"English",notif:"تفعيل الإشعارات",notifOn:"الإشعارات مفعّلة ✓",notifNo:"الإشعارات محظورة. فعّلها من إعدادات الهاتف لهذا التطبيق.",backup:"حفظ نسخة احتياطية",restore:"استرجاع نسخة احتياطية",restored:n=>"تم استرجاع "+n+" ملاحظة",badFile:"هذا الملف ليس نسخة احتياطية من Pocket Keep.",status:"محفوظة على هذا الهاتف · تعمل بدون إنترنت",custom:"اختر أي لون",copySuffix:" (نسخة)",at8:"8:00 ص",
+ ar:{all:"الكل",notes:"ملاحظات",tasks:"مهام",todo:"غير منجزة",reminders:"تذكيرات",pinned:"مثبّتة",others:"أخرى",search:"ابحث في الملاحظات والمهام",take:"اكتب ملاحظة…",newList:"قائمة جديدة",newImg:"ملاحظة بصورة",pin:"تثبيت",title:"العنوان",listItem:"عنصر",reply:"الرد…",close:"إغلاق",color:"لون الخلفية",remindMe:"ذكّرني",addImg:"إضافة صورة",more:"المزيد",undo:"تراجع",redo:"إعادة",showCb:"إظهار مربعات الاختيار",hideCb:"إخفاء مربعات الاختيار",untick:"إلغاء تحديد الكل",clearDone:"حذف العناصر المنجزة",copy:"عمل نسخة",del:"حذف الملاحظة",reminder:"تذكير",later:"لاحقاً اليوم",tomorrow:"غداً",nextWeek:"الأسبوع القادم",pick:"اختر التاريخ والوقت",save:"حفظ",fromNote:"من الملاحظة",phoneAlert:"تنبيه في التقويم",edited:"آخر تعديل",replied:"تم الرد",yesterday:"أمس",today:"اليوم",checked:n=>n+" منجز",doneOf:(a,b)=>a+"/"+b+" منجز",count:(a,b)=>a+" ملاحظة · "+b+" مهمة متبقية",emptyBig:"ملاحظاتك تظهر هنا",emptySmall:"اضغط <b>اكتب ملاحظة…</b> للبدء، أو أيقونة ☑ لقائمة مهام مع خانة رد تحت كل عنصر.",noMatch:"لا توجد نتائج",tryOther:"جرّب كلمة أو فلتر آخر.",deleted:"تم حذف الملاحظة",copyMade:"تم عمل نسخة",reminderT:"تذكير: ",untitled:"ملاحظة بدون عنوان",badImg:"تعذّر فتح هذا الملف كصورة.",full:"مساحة التخزين ممتلئة. احذف بعض الملاحظات أو الصور.",install:"تثبيت التطبيق",menu:"القائمة",switchLang:"English",notif:"تفعيل الإشعارات",notifOn:"الإشعارات مفعّلة ✓",notifNo:"الإشعارات محظورة. فعّلها من إعدادات الهاتف لهذا التطبيق.",backup:"حفظ نسخة احتياطية",restore:"استرجاع نسخة احتياطية",restored:n=>"تم استرجاع "+n+" ملاحظة",badFile:"هذا الملف ليس نسخة احتياطية من Pocket Keep.",status:"محفوظة على هذا الهاتف · تعمل بدون إنترنت",importKeep:"استيراد من Google Keep",importing:"جاري استيراد ملاحظات Keep…",imported:n=>"تم استيراد "+n+" ملاحظة من Google Keep",noKeep:"ما لقيت ملاحظات Keep. اختر ملف ‎.zip‎ من Google Takeout (أو ملفات ‎.json‎ داخل مجلد Keep).",needNet:"اتصل بالإنترنت عشان أقرأ ملف ‎.zip‎، وبعدها جرّب مرة ثانية.",custom:"اختر أي لون",copySuffix:" (نسخة)",at8:"8:00 ص",
   colors:{default:"افتراضي",lemon:"ليموني",mint:"نعناعي",sky:"سماوي",peach:"خوخي",lilac:"بنفسجي",rose:"وردي",sand:"رملي"}}
 };
 let lang="ar"; try{lang=localStorage.getItem("pocketkeep.lang")||"ar"}catch(e){}
@@ -785,6 +787,65 @@ $("#restoreFile").addEventListener("change",e=>{
   };
   r.readAsText(f);
 });
+/* ---------- import from Google Keep (Google Takeout) ---------- */
+const KEEP_COLORS={DEFAULT:"default",RED:"rose",ORANGE:"peach",YELLOW:"lemon",GREEN:"mint",TEAL:"mint",BLUE:"sky",CERULEAN:"sky",DARK_BLUE:"sky",PURPLE:"lilac",PINK:"rose",BROWN:"sand",GRAY:"sand"};
+function loadZipLib(){
+  if(window.JSZip) return Promise.resolve(window.JSZip);
+  return new Promise((ok,bad)=>{const sc=document.createElement("script");sc.src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";sc.onload=()=>ok(window.JSZip);sc.onerror=bad;document.head.appendChild(sc)});
+}
+function shrinkImage(blob){
+  return new Promise(res=>{
+    const url=URL.createObjectURL(blob), im=new Image();
+    im.onload=()=>{
+      let max=900,q=.72,out="";
+      for(let t=0;t<5;t++){const sc=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement("canvas");c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);out=c.toDataURL("image/jpeg",q);if(out.length<170000)break;max*=.78;q-=.06}
+      URL.revokeObjectURL(url); res(out);
+    };
+    im.onerror=()=>{URL.revokeObjectURL(url);res(null)};
+    im.src=url;
+  });
+}
+function hashId(str){let h=0;for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))|0}return "gk"+(h>>>0).toString(36)}
+async function keepToNote(j,name,getFile){
+  if(!j||typeof j!=="object"||j.isTrashed) return null;
+  if(!("textContent" in j)&&!("listContent" in j)&&!("title" in j)) return null;
+  const ts=Math.round((j.userEditedTimestampUsec||j.createdTimestampUsec||Date.now()*1000)/1000);
+  const n={id:hashId(name+"|"+(j.createdTimestampUsec||"")),title:j.title||"",text:"",items:[],type:"note",color:KEEP_COLORS[j.color]||"default",pinned:!!j.isPinned,remind:null,img:null,created:Math.round((j.createdTimestampUsec||ts*1000)/1000),updated:ts};
+  if(Array.isArray(j.listContent)&&j.listContent.length){n.type="list";n.items=j.listContent.map(x=>({k:uid(),t:x.text||"",d:!!x.isChecked}))}
+  else n.text=j.textContent||"";
+  const labels=(j.labels||[]).map(l=>"#"+(l.name||"").replace(/\s+/g,"_")).filter(x=>x.length>1);
+  if(labels.length){ if(n.type==="list") n.title=(n.title?n.title+" ":"")+labels.join(" "); else n.text=(n.text?n.text+"\n\n":"")+labels.join(" ") }
+  const links=(j.annotations||[]).map(a=>a.url).filter(Boolean).filter(u=>!(n.text||"").includes(u));
+  if(links.length&&n.type==="note") n.text=(n.text?n.text+"\n":"")+links.join("\n");
+  const att=(j.attachments||[]).find(a=>/^image\//.test(a.mimetype||""));
+  if(att&&getFile){ try{const b=await getFile(att.filePath); if(b) n.img=await shrinkImage(b)}catch(e){} }
+  if(isEmpty(n)) return null;
+  return n;
+}
+$("#aKeep").onclick=()=>{$("#appMenu").hidden=true; $("#keepFile").click()};
+$("#keepFile").addEventListener("change",async e=>{
+  const files=[...e.target.files]; e.target.value=""; if(!files.length) return;
+  toast(T("importing"),false);
+  const found=[];
+  try{
+    for(const f of files){
+      if(/\.zip$/i.test(f.name)||/zip/.test(f.type)){
+        let JSZip; try{JSZip=await loadZipLib()}catch(err){toast(T("needNet"),false);return}
+        const zip=await JSZip.loadAsync(f);
+        const byBase={}; zip.forEach((path,entry)=>{if(!entry.dir) byBase[path.split("/").pop()]=entry});
+        const getFile=async fp=>{const en=byBase[(fp||"").split("/").pop()]; if(!en) return null; let b=await en.async("blob"); if(!/^image\//.test(b.type)){const ext=(fp.split(".").pop()||"jpg").toLowerCase();b=new Blob([b],{type:"image/"+(ext==="jpg"?"jpeg":ext)})} return b};
+        const entries=[]; zip.forEach((path,entry)=>{if(!entry.dir&&/\.json$/i.test(path)&&!/Labels\.json$/i.test(path)) entries.push([path,entry])});
+        for(const [path,entry] of entries){ try{const j=JSON.parse(await entry.async("string")); const n=await keepToNote(j,path,getFile); if(n) found.push(n)}catch(err){} }
+      }else if(/\.json$/i.test(f.name)){
+        try{const j=JSON.parse(await f.text()); const n=await keepToNote(j,f.name,null); if(n) found.push(n)}catch(err){}
+      }
+    }
+  }catch(err){}
+  if(!found.length){toast(T("noKeep"),false);return}
+  found.forEach(n=>{notes[n.id]=n}); lsWrite(); render();
+  toast(T("imported")(found.length),false);
+});
+
 let deferredInstall=null;
 window.addEventListener("beforeinstallprompt",e=>{e.preventDefault(); deferredInstall=e; $("#installBtn").hidden=false});
 $("#installBtn").onclick=async()=>{if(!deferredInstall) return; deferredInstall.prompt(); try{await deferredInstall.userChoice}catch(e){} deferredInstall=null; $("#installBtn").hidden=true};
